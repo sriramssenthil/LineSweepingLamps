@@ -1,3 +1,4 @@
+package Coding;
 import java.util.PriorityQueue;
 
 //import java.util.AbstractMap.SimpleEntry;
@@ -15,9 +16,12 @@ public class Lamps {
     static class PointComparator implements Comparator<int[]>{
         @Override
         public int compare(int[] arr1, int[] arr2) {
+
             if (arr1[0] != arr2[0]){
+                // Primary comparison by coordinate
                 return arr1[0]-arr2[0];
             } else {
+                // Secondary comparison by type
                 return arr1[1]-arr2[1];
             }
         }
@@ -27,25 +31,32 @@ public class Lamps {
     public static int[] illuminatedBenches(int[][] lamps, int[] benches){
         PriorityQueue<int[]> pq = new PriorityQueue<>(new PointComparator());
 
-        //Populating the priority queue
+        //Populating the priority queue with the lamps
         for (int i=0;i<lamps.length;i++){
             pq.add(new int[]{lamps[i][0],1});
             pq.add(new int[]{lamps[i][1],3});
         }
 
+        //Populating the priority queue with the benches
+        // The array has an extra parameter for the index in the benches array
         for( int i=0;i<benches.length;i++){
             pq.add(new int[]{benches[i],2,i});
         }
 
-        
-
+        // Array to store the number of lamps illuminating each bench
         int[] vals = new int[benches.length];
+
+        // Variable to track how many lamps are currently on
         int lampsOn = 0;
+
+        // Works by iterating through the priority queue and keeping track of how many lamps are currently on
+        // When a bench is reached, the number of lamps on, is the number of lamps illuminating the bench
         while(!pq.isEmpty()){
             int[] curr = pq.poll();
             if(curr[1]==1){
                 lampsOn++;
             } else if (curr[1]==2){
+                // Adds to vals using the associated index in the benches array
                 vals[curr[2]] = lampsOn;
             } else {
                 lampsOn--;
@@ -55,6 +66,7 @@ public class Lamps {
         return vals;
     }
 
+    // Function to print an array
     public static String printArr(int[] arr){
         String res="";
         for(int i: arr){
